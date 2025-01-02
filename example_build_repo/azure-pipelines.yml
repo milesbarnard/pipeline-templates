@@ -1,0 +1,23 @@
+# build and push a docker image
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Docker@2
+  inputs:
+    containerRegistry: 'example_build_repo'
+    repository: 'example_build_repo'
+    command: 'buildAndPush'
+    Dockerfile: 'Dockerfile'
+    tags: |
+      'latest'
+      '1.0'
+
+- template: ../example_repo/myproject/prod/apps.yaml
+  parameters:
+    NGINX_IMAGE: 'nginx:1.19.6'
+
